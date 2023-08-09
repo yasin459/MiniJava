@@ -1,34 +1,32 @@
-# MiniJava
-Mini-Java is a subset of Java. MiniJava compiler implement a compiler for the Mini-java
-programming language.
+### توضیحات 
 
-# Rules
-```
-Goal --> Source EOF
-Source --> ClassDeclarations MainClass
-MainClass --> class Identifier { public static void main() { VarDeclarations Statements}}
-ClassDeclarations --> ClassDeclaration ClassDeclarations | lambda
-ClassDeclaration --> class Identifier Extension { FieldDeclarations MethodDeclarations }
-Extension --> extends Identifier | lambda
-FieldDeclarations --> FieldDeclaration FieldDeclarations | lambda
-FieldDeclaration --> static Type Identifier ;
-VarDeclarations --> VarDeclaration VarDeclarations | lambda
-VarDeclaration --> Type Identifier ;
-MethodDeclarations --> MethodDeclaration MethodDeclarations | lambda
-MethodDeclaration --> public static Type Identifier ( Parameters ) { VarDeclarations Statements return GenExpression ; }
-Parameters --> Type Identifier Parameter | lambda
-Parameter --> , Type Identifier Parameter | lambda
-Type --> boolean | int
-Statements --> Statements Statement | lambda
-Statement --> { Statements } | if ( GenExpression ) Statement else Statement | while ( GenExpression ) Statement | System.out.println ( GenExpression ) ; | Identifier = GenExpression ;
-GenExpression --> Expression | RelExpression
-Expression --> Expression + Term | Expression - Term | Term
-Term --> Term * Factor | Factor
-Factor --> ( Expression ) | Identifier | Identifier . Identifier | Identifier . Identifier ( Arguments ) | true | false | Integer
-RelExpression --> RelExpression && RelTerm | RelTerm
-RelTerm --> Expression == Expression | Expression < Expression
-Arguments --> GenExpression Argument | lambda
-Argument --> , GenExpression Argument | lambda
-Identifier --> <IDENTIFIER_LITERAL>
-Integer --> <INTEGER_LITERAL>
-```
+کد تمیز: کد تمیز در مهندسی نرم‌افزار به کدی اشاره دارد که با استفاده از استانداردها، سازماندهی مناسب، نامگذاری صحیح و قابل فهم، انتخاب مناسب ساختارها و الگوها، کاهش تکرارهای ناپایدار و مدیریت صحیح منابع، خوانایی، قابل نگهداری و قابل توسعه است.
+
+
+بوی بد: بوی بد در مهندسی نرم‌افزار به مشکلات و نقاط ضعفی اشاره دارد که باعث کاهش کیفیت و عملکرد نرم‌افزار می‌شود.
+
+بدهی فنی: بدهی فنی در مهندسی نرم‌افزار به وجود آوردن تکنیک‌ها، مشکلات و نقاط ضعف فنی است که می‌تواند منجر به کاهش کیفیت، انعطاف‌پذیری و قابلیت توسعه نرم‌افزار شود.
+
+
+## توضیح بو های بد
+
+
+توضیح:Bloaters (حجم‌زائی‌ها): کد بزرگ و پیچیده، کلاس بزرگ، استفاده از نوع‌های ابتدایی، تعداد زیادی پارامتر، تکرار اطلاعات.
+
+توضیح:Object-Orientation Abusers (سوءاستفاده از شیءگرایی): استفاده از دستور switch، فیلدهای موقتی، ارث‌بری ناپایدار.
+
+توضیح:Change Preventers (جلوگیری از تغییر): تغییرات پراکنده، تغییرات یکجا.
+
+توضیح:Dispensables (اجزای غیرضروری): کلاس‌های بی‌استفاده، تکرار کد.
+
+توضیح:Couplers (متصل‌کننده‌ها): وابستگی زیاد به داده‌های دیگر کلاس‌ها، وابستگی‌های نامناسب، زنجیره‌های فراخوانی متد.
+
+## توضیحات مربوط به lazy class:
+
+بوی بد "Lazy Class" در دسته‌بندی "Dispensables" (اجزای غیرضروری) قرار می‌گیرد.
+
+برای برطرف کردن بوی "Lazy Class"، می‌توان از بازآرایی‌های زیر استفاده کرد:
+
+ادغام (Merge): ادغام کلاس‌های بی‌استفاده با کلاس‌های دیگر که وظایف مشابهی دارند.
+
+حذف (Remove): حذف کلاس‌هایی که هیچ نقش و وظیفه‌ای در برنامه ندارند و تاثیری در عملکرد کد ندارند.
