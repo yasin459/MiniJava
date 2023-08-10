@@ -1,9 +1,6 @@
 package semantic.symbol;
 
-import codeGenerator.Address;
-import codeGenerator.Memory;
-import codeGenerator.TypeAddress;
-import codeGenerator.varType;
+import codeGenerator.CodeGeneratorFacade;
 import errorHandler.ErrorHandler;
 
 import java.util.ArrayList;
@@ -12,16 +9,13 @@ import java.util.Map;
 
 public class SymbolTable {
     private Map<String, Klass> klasses;
-    private Map<String, Address> keyWords;
-    private Memory mem;
     private SymbolType lastType;
+    private final CodeGeneratorFacade codeGeneratorFacade;
 
-    public SymbolTable(Memory memory) {
-        mem = memory;
+    public SymbolTable(CodeGeneratorFacade generator) {
+        codeGeneratorFacade = generator;
         klasses = new HashMap<>();
-        keyWords = new HashMap<>();
-        keyWords.put("true", new Address(1, varType.Bool, TypeAddress.Imidiate));
-        keyWords.put("false", new Address(0, varType.Bool, TypeAddress.Imidiate));
+
     }
 
     public void setLastType(SymbolType type) {
@@ -36,7 +30,7 @@ public class SymbolTable {
     }
 
     public void addField(String fieldName, String className) {
-        klasses.get(className).Fields.put(fieldName, new Symbol(lastType, mem.getDateAddress()));
+        klasses.get(className).Fields.put(fieldName, new Symbol(lastType, codeGeneratorFacade.getDateAddress()));
     }
 
     public void addMethod(String className, String methodName, int address) {
@@ -51,37 +45,39 @@ public class SymbolTable {
     }
 
     public void addMethodLocalVariable(String className, String methodName, String localVariableName) {
-//        try {
+        // try {
         if (klasses.get(className).Methodes.get(methodName).localVariable.containsKey(localVariableName)) {
             ErrorHandler.printError("This variable already defined");
         }
-        klasses.get(className).Methodes.get(methodName).localVariable.put(localVariableName, new Symbol(lastType, mem.getDateAddress()));
-//        }catch (NullPointerException e){
-//            e.printStackTrace();
-//        }
+        klasses.get(className).Methodes.get(methodName).localVariable.put(localVariableName,
+                new Symbol(lastType, codeGeneratorFacade.getDateAddress()));
+        // }catch (NullPointerException e){
+        // e.printStackTrace();
+        // }
     }
 
     public void setSuperClass(String superClass, String className) {
         klasses.get(className).superClass = klasses.get(superClass);
     }
 
-    public Address get(String keywordName) {
-        return keyWords.get(keywordName);
+    public CodeGeneratorFacade getCodeGeneratorFacade() {
+        return codeGeneratorFacade;
     }
 
     public Symbol get(String fieldName, String className) {
-//        try {
+        // try {
         return klasses.get(className).getField(fieldName);
-//        }catch (NullPointerException n)
-//        {
-//            n.printStackTrace();
-//            return null;
-//        }
+        // }catch (NullPointerException n)
+        // {
+        // n.printStackTrace();
+        // return null;
+        // }
     }
 
     public Symbol get(String className, String methodName, String variable) {
         Symbol res = klasses.get(className).Methodes.get(methodName).getVariable(variable);
-        if (res == null) res = get(variable, className);
+        if (res == null)
+            res = get(variable, className);
         return res;
     }
 
@@ -90,12 +86,12 @@ public class SymbolTable {
     }
 
     public void startCall(String className, String methodName) {
-//        try {
+        // try {
         klasses.get(className).Methodes.get(methodName).reset();
-//        }catch (NullPointerException n)
-//        {
-//            n.printStackTrace();
-//        }
+        // }catch (NullPointerException n)
+        // {
+        // n.printStackTrace();
+        // }
     }
 
     public int getMethodCallerAddress(String className, String methodName) {
@@ -107,19 +103,18 @@ public class SymbolTable {
     }
 
     public SymbolType getMethodReturnType(String className, String methodName) {
-//        try {
+        // try {
         return klasses.get(className).Methodes.get(methodName).returnType;
-//        }catch (NullPointerException ed){
-//            ed.printStackTrace();
-//            return null;
-//        }
+        // }catch (NullPointerException ed){
+        // ed.printStackTrace();
+        // return null;
+        // }
 
     }
 
     public int getMethodAddress(String className, String methodName) {
         return klasses.get(className).Methodes.get(methodName).codeAddress;
     }
-
 
     class Klass {
         public Map<String, Symbol> Fields;
@@ -155,20 +150,22 @@ public class SymbolTable {
             this.codeAddress = codeAddress;
             this.returnType = returnType;
             this.orderdParameters = new ArrayList<>();
-            this.returnAddress = mem.getDateAddress();
-            this.callerAddress = mem.getDateAddress();
+            this.returnAddress = codeGeneratorFacade.getDateAddress();
+            this.callerAddress = codeGeneratorFacade.getDateAddress();
             this.parameters = new HashMap<>();
             this.localVariable = new HashMap<>();
         }
 
         public Symbol getVariable(String variableName) {
-            if (parameters.containsKey(variableName)) return parameters.get(variableName);
-            if (localVariable.containsKey(variableName)) return localVariable.get(variableName);
+            if (parameters.containsKey(variableName))
+                return parameters.get(variableName);
+            if (localVariable.containsKey(variableName))
+                return localVariable.get(variableName);
             return null;
         }
 
         public void addParameter(String parameterName) {
-            parameters.put(parameterName, new Symbol(lastType, mem.getDateAddress()));
+            parameters.put(parameterName, new Symbol(lastType, codeGeneratorFacade.getDateAddress()));
             orderdParameters.add(parameterName);
         }
 
@@ -183,16 +180,16 @@ public class SymbolTable {
 
 }
 
-//class Symbol{
-//    public SymbolType type;
-//    public int address;
-//    public Symbol(SymbolType type , int address)
-//    {
-//        this.type = type;
-//        this.address = address;
-//    }
-//}
-//enum SymbolType{
-//    Int,
-//    Bool
-//}
+// class Symbol{
+// public SymbolType type;
+// public int address;
+// public Symbol(SymbolType type , int address)
+// {
+// this.type = type;
+// this.address = address;
+// }
+// }
+// enum SymbolType{
+// Int,
+// Bool
+// }
