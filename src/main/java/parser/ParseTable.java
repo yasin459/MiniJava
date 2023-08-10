@@ -21,6 +21,22 @@ public class ParseTable {
     private List<Map<NonTerminal, Integer>> gotoTable;
     private ScannerFacade scannerFacade;
 
+    private void addToNonTerminals(int i, String col, Map<Integer, NonTerminal> nonTerminals) {
+        String temp = col.substring(5);
+        try {
+            nonTerminals.put(i, NonTerminal.valueOf(temp));
+        } catch (Exception e) {
+        }
+    }
+
+    private void addToTerminals(int i, String col, Map<Integer, Token> terminals, ScannerFacade scannerFacade) {
+        terminals.put(i, scannerFacade.getToken(col));
+    }
+
+    private boolean startsWithGoto(String col) {
+        return col.startsWith("Goto");
+    }
+
     public ParseTable(String jsonTable) throws Exception {
         scannerFacade = ScannerFacade.getInstance();
         jsonTable = jsonTable.substring(2, jsonTable.length() - 2);
@@ -30,14 +46,10 @@ public class ParseTable {
         Rows[0] = Rows[0].substring(1, Rows[0].length() - 1);
         String[] cols = Rows[0].split("\",\"");
         for (int i = 1; i < cols.length; i++) {
-            if (cols[i].startsWith("Goto")) {
-                String temp = cols[i].substring(5);
-                try {
-                    nonTerminals.put(i, NonTerminal.valueOf(temp));
-                } catch (Exception e) {
-                }
+            if (startsWithGoto(cols[i])) {
+                addToNonTerminals(i, cols[i], nonTerminals);
             } else {
-                terminals.put(i, scannerFacade.getToken(cols[i]));
+                addToTerminals(i, cols[i], terminals, scannerFacade);
             }
         }
         actionTable = new ArrayList<Map<Token, Action>>();
