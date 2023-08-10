@@ -30,8 +30,15 @@ public class Memory {
         return lastDataAddress - dataSize;
     }
 
-    public int saveMemory() {
+    // public int saveMemory() {
+    //     codeBlock.add(new _3AddressCode());
+    //     return codeBlock.size() - 1;
+    // }
+
+    public void saveMemory() {
         codeBlock.add(new _3AddressCode());
+    }
+    public int calcMemorySize(){
         return codeBlock.size() - 1;
     }
 

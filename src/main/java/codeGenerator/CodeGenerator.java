@@ -343,7 +343,8 @@ public class CodeGenerator {
     }
 
     public void save() {
-        ss.push(new Address(memory.saveMemory(), varType.Address));
+        memory.saveMemory();
+        ss.push(new Address(memory.calcMemorySize(), varType.Address));
     }
 
     public void _while() {
@@ -353,7 +354,8 @@ public class CodeGenerator {
     }
 
     public void jpf_save() {
-        Address save = new Address(memory.saveMemory(), varType.Address);
+        memory.saveMemory();
+        Address save = new Address(memory.calcMemorySize(), varType.Address);
         memory.add3AddressCode(ss.pop().num, Operation.JPF, ss.pop(),
                 new Address(memory.getCurrentCodeBlockAddress(), varType.Address), null);
         ss.push(save);
