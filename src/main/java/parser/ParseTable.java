@@ -1,5 +1,6 @@
 package parser;
 
+import scanner.ScannerFacade;
 import scanner.token.Token;
 
 import java.util.ArrayList;
@@ -17,8 +18,10 @@ import parser.actionsPolymorphysm.ShiftAction;
 public class ParseTable {
     private ArrayList<Map<Token, Action>> actionTable;
     private ArrayList<Map<NonTerminal, Integer>> gotoTable;
+    private ScannerFacade scannerFacade;
 
     public ParseTable(String jsonTable) throws Exception {
+        scannerFacade = ScannerFacade.getInstance();
         jsonTable = jsonTable.substring(2, jsonTable.length() - 2);
         String[] Rows = jsonTable.split("\\],\\[");
         Map<Integer, Token> terminals = new HashMap<Integer, Token>();
@@ -31,10 +34,9 @@ public class ParseTable {
                 try {
                     nonTerminals.put(i, NonTerminal.valueOf(temp));
                 } catch (Exception e) {
-                    temp = temp;
                 }
             } else {
-                terminals.put(i, new Token(Token.getTyepFormString(cols[i]), cols[i]));
+                terminals.put(i, scannerFacade.getToken(cols[i]));
             }
         }
         actionTable = new ArrayList<Map<Token, Action>>();
@@ -51,7 +53,8 @@ public class ParseTable {
             for (int j = 1; j < cols.length; j++) {
                 if (!cols[j].equals("")) {
                     if (cols[j].equals("acc")) {
-                        actionTable.get(actionTable.size() - 1).put(terminals.get(j), new Action(new AcceptAction(), 0));
+                        actionTable.get(actionTable.size() - 1).put(terminals.get(j),
+                                new Action(new AcceptAction(), 0));
                     } else if (terminals.containsKey(j)) {
                         // try {
                         Token t = terminals.get(j);

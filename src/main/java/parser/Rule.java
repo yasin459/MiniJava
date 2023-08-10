@@ -1,5 +1,6 @@
 package parser;
 
+import scanner.ScannerFacade;
 import scanner.token.Token;
 
 import java.util.ArrayList;
@@ -9,7 +10,10 @@ import java.util.ArrayList;
  */
 
 public class Rule {
+    private ScannerFacade scannerFacade;
+
     public Rule(String stringRule) {
+        scannerFacade = ScannerFacade.getInstance();
         int index = stringRule.indexOf("#");
         if (index != -1) {
             try {
@@ -22,11 +26,11 @@ public class Rule {
             semanticAction = 0;
         }
         String[] splited = stringRule.split("->");
-//        try {
+        // try {
         LHS = NonTerminal.valueOf(splited[0]);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
+        // }catch (Exception e){
+        // e.printStackTrace();
+        // }
         RHS = new ArrayList<GrammarSymbol>();
         if (splited.length > 1) {
             String[] RHSs = splited[1].split(" ");
@@ -34,12 +38,12 @@ public class Rule {
                 try {
                     RHS.add(new GrammarSymbol(NonTerminal.valueOf(s)));
                 } catch (Exception e) {
-//                    try{
-                    RHS.add(new GrammarSymbol(new Token(Token.getTyepFormString(s), s)));
-//                    }catch (IllegalArgumentException d){
-//                        d.printStackTrace();
-//                        Log.print(s);
-//                    }
+                    // try{
+                    RHS.add(new GrammarSymbol(scannerFacade.getToken(s)));
+                    // }catch (IllegalArgumentException d){
+                    // d.printStackTrace();
+                    // Log.print(s);
+                    // }
                 }
             }
         }
