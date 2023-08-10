@@ -5,6 +5,7 @@ import scanner.token.Token;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import parser.actionsPolymorphysm.AcceptAction;
@@ -16,8 +17,8 @@ import parser.actionsPolymorphysm.ShiftAction;
  */
 
 public class ParseTable {
-    private ArrayList<Map<Token, Action>> actionTable;
-    private ArrayList<Map<NonTerminal, Integer>> gotoTable;
+    private List<Map<Token, Action>> actionTable;
+    private List<Map<NonTerminal, Integer>> gotoTable;
     private ScannerFacade scannerFacade;
 
     public ParseTable(String jsonTable) throws Exception {
